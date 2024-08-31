@@ -1,0 +1,27 @@
+name: &name "SpeakerIdentificationInfer"
+
+data:
+    enrollment_manifest: ???
+    test_manifest: ???
+    out_manifest: ''
+    sample_rate: 16000
+
+backend:
+    backend_model: neural_classifier # supported backends are cosine_similarity and neural_classifier
+
+    cosine_similarity:
+        model_path: ""
+        batch_size: 4
+
+    neural_classifier:
+        model_path: ""
+        batch_size: 4
+
+# json manifest line example
+#
+# enrollment_manifest:
+# {"audio_filepath": "/path/to/audio_file", "offset": 0, "duration": null, "label": "<speaker_label>"}
+# 
+# test_manifest:
+# {"audio_filepath": "/path/to/audio_file", "offset": 0, "duration": null, "label": "infer"}
+#
