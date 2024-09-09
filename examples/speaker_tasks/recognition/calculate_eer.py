@@ -106,12 +106,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute EER score from given files.")
     parser.add_argument("-k", "--key_file", required=True, help="Path to key_files.tsv")
     parser.add_argument("-i", "--infer_file", required=True, help="Path to infer.json")
-    parser.add_argument(
-        "-o",
-        "--output_csv",
-        required=True,
-        help="Path to output CSV file to save EER results",
-    )
 
     args = parser.parse_args()
 
