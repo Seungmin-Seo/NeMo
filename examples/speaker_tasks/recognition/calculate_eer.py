@@ -80,7 +80,7 @@ def calculate_eer(key_df, infer_df):
         plt.ylabel('True Positive Rate')
         plt.title('Receiver Operating Characteristic (ROC) Curve')
         plt.legend(loc='lower right')
-        plt.show()
+        # plt.show()
 
         eer_scores = []
         for threshold, fpr_val, fnr_val in zip(thresholds, fpr, fnr):

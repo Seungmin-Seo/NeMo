@@ -26,7 +26,6 @@ from nemo.utils.exp_manager import exp_manager
 
 seed_everything(42)
 
-
 @hydra_runner(config_path="conf", config_name="titanet-finetune.yaml")
 def main(cfg):
 
@@ -34,6 +33,15 @@ def main(cfg):
     trainer = pl.Trainer(**cfg.trainer)
     log_dir = exp_manager(trainer, cfg.get("exp_manager", None))
     speaker_model = EncDecSpeakerLabelModel(cfg=cfg.model, trainer=trainer)
+
+    # if cfg.init_from_pretrained_model and cfg.init_from_pretrained_model.speaker_tasks.get('nemo_file'):
+    #     nemo_file_path = cfg.init_from_pretrained_model.speaker_tasks.nemo_file
+    #     logging.info(f"Loading model from {nemo_file_path}")
+    #     speaker_model = EncDecSpeakerLabelModel.restore_from(nemo_file_path)
+    # else:
+    #     speaker_model = EncDecSpeakerLabelModel(cfg=cfg.model, trainer=trainer)
+
+
     speaker_model.maybe_init_from_pretrained_checkpoint(cfg)
 
     # save labels to file
@@ -43,9 +51,11 @@ def main(cfg):
                 for label in speaker_model.labels:
                     f.write(f'{label}\n')
 
-    trainer.fit(speaker_model)
-
-    torch.distributed.destroy_process_group()
+    try:
+        trainer.fit(speaker_model)
+    finally:
+        if torch.distributed.is_initialized():
+            torch.distributed.destroy_process_group()
     if hasattr(cfg.model, 'test_ds') and cfg.model.test_ds.manifest_filepath is not None:
         if trainer.is_global_zero:
             trainer = pl.Trainer(devices=1, accelerator=cfg.trainer.accelerator, strategy=cfg.trainer.strategy)

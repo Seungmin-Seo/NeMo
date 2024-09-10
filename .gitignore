@@ -14,8 +14,8 @@ runs
 fastspeech_output
 .hydra
 .bash_history.local
-examples/speaker_tasks/recognition/data
-examples/speaker_tasks/recognition/conf
+examples/speaker_tasks/recognition/data/*
+examples/speaker_tasks/recognition/conf/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
