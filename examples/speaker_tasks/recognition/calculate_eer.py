@@ -50,6 +50,7 @@ def calculate_eer(key_df, infer_df):
         lambda x: 1 if x == "target" else 0
     )
 
+    # merged_df.to_csv("./data/trial-key-scores_titanet_finetune.csv", index=False)
     scores = merged_df["score"].values
     labels = merged_df["label"].values
 
