@@ -4,18 +4,17 @@ import os
 def replace_label(args):
     data = []
     with open(args.input_file, 'r') as file:
-        for line in file:
-            data.append(json.loads(line))
-
-
-    for row in data:
-        if 'label' in row:
-            row['label'] = 'infer'
+        lines = file.readlines()
 
     base_dir = os.path.dirname(args.input_file)
-    output_filepath = os.path.join(base_dir, 'sre21eval_test_manifest_replaced.json')
+    output_filepath = os.path.join(base_dir, 'sre21eval_16k_test_manifest_replaced.json')
     with open(output_filepath, 'w') as file:
-        json.dump(data, file)
+        for line in lines:
+            obj = json.loads(line)
+            if 'label' in obj:
+                obj['label'] = 'infer'
+            file.write(json.dumps(obj) + '\n')
+
     print("All 'label' values have been replaced with 'infer'.")
 
 if __name__ == "__main__":
