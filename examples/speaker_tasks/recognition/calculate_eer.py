@@ -26,6 +26,18 @@ def load_infer_files(file_path):
 def extract_filename(filepath):
     return os.path.splitext(os.path.basename(filepath))[0]
 
+def plot_score_distributions(merged_df):
+    target_scores = merged_df[merged_df["label"] == 1]["score"]
+    non_target_scores = merged_df[merged_df["label"] == 0]["score"]
+
+    plt.figure(figsize=(10, 6))
+    plt.hist(target_scores, bins=50, alpha=0.6, color='g', label="Target Scores")
+    plt.hist(non_target_scores, bins=50, alpha=0.6, color='r', label="Non-target Scores")
+    plt.xlabel("Cosine Similarity Score")
+    plt.ylabel("Frequency")
+    plt.title("Score Distribution: Target vs Non-Target")
+    plt.legend(loc='upper right')
+    plt.show()
 
 def calculate_eer(key_df, infer_df):
     infer_df["audio_filename"] = infer_df["audio_filepath"].apply(extract_filename)
@@ -51,6 +63,7 @@ def calculate_eer(key_df, infer_df):
     )
 
     # merged_df.to_csv("./data/trial-key-scores_titanet_finetune.csv", index=False)
+    plot_score_distributions(merged_df)
     scores = merged_df["score"].values
     labels = merged_df["label"].values
 

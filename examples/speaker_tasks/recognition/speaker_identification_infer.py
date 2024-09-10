@@ -74,6 +74,10 @@ def main(cfg):
 
         reference_embs = np.asarray(reference_embs)
         
+        # Normalize the reference embeddings after averaging
+        reference_embs = reference_embs / (np.linalg.norm(reference_embs, ord=2, axis=-1, keepdims=True))
+
+        
         scores = np.matmul(test_embs, reference_embs.T)
         # matched_labels = scores.argmax(axis=-1)
         # matched_labels = [np.where(row > threshold)[0] for row in scores]
