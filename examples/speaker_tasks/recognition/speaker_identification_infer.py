@@ -16,6 +16,8 @@ import json
 
 import numpy as np
 import torch
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
 from omegaconf import OmegaConf
 from pytorch_lightning import seed_everything
 
@@ -73,10 +75,28 @@ def main(cfg):
             reference_embs.append(embedding)
 
         reference_embs = np.asarray(reference_embs)
-        
+
         # Normalize the reference embeddings after averaging
         reference_embs = reference_embs / (np.linalg.norm(reference_embs, ord=2, axis=-1, keepdims=True))
 
+        combined_embs = np.concatenate([enroll_embs, test_embs], axis=0)
+        tsne = TSNE(n_components=2, random_state=42)
+        reduced_embs = tsne.fit_transform(combined_embs)
+
+        # Visualize the embeddings
+        num_enroll = len(enroll_embs)
+        plt.figure(figsize=(10, 7))
+
+        plt.scatter(reduced_embs[:num_enroll, 0], reduced_embs[:num_enroll, 1], c='b', label='Enrollment Embeddings')
+        plt.scatter(reduced_embs[num_enroll:, 0], reduced_embs[num_enroll:, 1], c='r', label='Test Embeddings')
+
+        plt.legend()
+        plt.title("t-SNE Visualization of Speaker Embeddings")
+        plt.xlabel("t-SNE Dimension 1")
+        plt.ylabel("t-SNE Dimension 2")
+
+        plt.savefig("./tsne_speaker_embeddings.png")
+        plt.close()
         
         scores = np.matmul(test_embs, reference_embs.T)
         # matched_labels = scores.argmax(axis=-1)
