@@ -16,7 +16,7 @@ import json
 
 import numpy as np
 import torch
-from sklearn.manifold import TSNE
+from openTSNE import TSNE
 import matplotlib.pyplot as plt
 from omegaconf import OmegaConf
 from pytorch_lightning import seed_everything
@@ -80,8 +80,9 @@ def main(cfg):
         reference_embs = reference_embs / (np.linalg.norm(reference_embs, ord=2, axis=-1, keepdims=True))
 
         combined_embs = np.concatenate([enroll_embs, test_embs], axis=0)
+        # combined_embs = combined_embs[:1000] # to minimize computing resources
         tsne = TSNE(n_components=2, random_state=42)
-        reduced_embs = tsne.fit_transform(combined_embs)
+        reduced_embs = tsne.fit(combined_embs)
 
         # Visualize the embeddings
         num_enroll = len(enroll_embs)
