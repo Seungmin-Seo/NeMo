@@ -1,3 +1,8 @@
+"""
+* Last Update: Oct-01-2024
+* Author: Seungmin Seo
+"""
+
 import pandas as pd
 import json
 import os

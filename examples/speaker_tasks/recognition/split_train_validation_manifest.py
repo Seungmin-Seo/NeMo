@@ -1,3 +1,9 @@
+"""
+* Last Update: Oct-01-2024
+* Description: This scripts splits manifest file into training/validation manifests
+* Author: Seungmin Seo 
+"""
+
 import json
 from sklearn.model_selection import train_test_split
 
@@ -28,9 +34,9 @@ def main(manifest_path, train_output_path, val_output_path):
     save_manifest(val_data, val_output_path)
 
 if __name__ == '__main__':
-    manifest_path = './data/sre21dev_16k_all_manifest.json'  # Path to your original manifest file
-    train_output_path = './data/sre21dev_80training.json'  # Output for training data
-    val_output_path = './data/sre21dev_20validation.json'  # Output for validation data
+    manifest_path = '' # path to the origianl manifest file
+    train_output_path = '' # path to 80% training manifest.json
+    val_output_path = '' # path to 20% validation manifest.json
 
     # Run the script to split and save the manifest
     main(manifest_path, train_output_path, val_output_path)
